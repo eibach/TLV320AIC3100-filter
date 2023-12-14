@@ -1,6 +1,6 @@
 Purpose
 =======
-This a tool for calculation filter coefficients for the Texas Instruments TLV320AIC3100 codec.
+This a tool for calculation filter coefficients for the Texas Instruments [TLV320AIC3100](https://www.ti.com/product//TLV320AIC3100) codec.
 There is a vendor tool for this, but it is Windows only, GUI only and not OSS.
 
 This tool is based on scipy and matplotlib. As I clearly have no clue, what I am doing here, please take all results with a grain of salt.
