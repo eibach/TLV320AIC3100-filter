@@ -6,7 +6,6 @@ import numpy as np
 from operator import add
 import matplotlib.pyplot as plt
 
-FS=48000
 filter_list = []
 
 def one_dot_15(x):
@@ -25,32 +24,36 @@ def print_1o(b, a):
 
 class LowpassAction(argparse.Action):
 	def __call__(self, parser, namespace, values, option_string=None):
-		b, a = signal.butter(1, float(values), btype='low', fs=FS)
+		print(namespace)
+		b, a = signal.butter(1, float(values), btype='low', fs=namespace.fs)
 		filter_list.append((b, a))
 		print('Lowpass', values, 'Hz')
 		print_1o(b, a)
 
 class HighpassAction(argparse.Action):
 	def __call__(self, parser, namespace, values, option_string=None):
-		b, a = signal.butter(1, float(values), btype='high', fs=FS)
+		print(namespace)
+		b, a = signal.butter(1, float(values), btype='high', fs=namespace.fs)
 		filter_list.append((b, a))
 		print('Highpass', values, 'Hz')
 		print_1o(b, a)
 
 class NotchAction(argparse.Action):
 	def __call__(self, parser, namespace, values, option_string=None):
-		b, a = signal.iirnotch(float(values[0]), float(values[0]) / float(values[1]), fs=FS)
+		print(namespace)
+		b, a = signal.iirnotch(float(values[0]), float(values[0]) / float(values[1]), fs=namespace.fs)
 		filter_list.append((b, a))
 		print('Notch', values[0], 'Hz BW ', values[1], 'Hz')
 		print_bq(b, a)
 
 parser = argparse.ArgumentParser()
 
+parser.add_argument('--fs', default=48000.0, metavar='freq', type=float, help='sampling frequency, must go first, default 48000')
 parser.add_argument('--lowpass', action=LowpassAction, metavar='freq')
 parser.add_argument('--highpass', action=HighpassAction, metavar='freq')
 parser.add_argument('--notch', action=NotchAction, nargs=2, metavar=('freq', 'bw'))
 
-parser.parse_args()
+args = parser.parse_args()
 
 # transformations
 amplitudes = np.zeros([19980,])
@@ -58,7 +61,7 @@ angles = np.zeros([19980,])
 
 for filter in filter_list:
 	(b, a) = filter
-	w, h = signal.freqz(b, a, range(20,20000), fs=FS)
+	w, h = signal.freqz(b, a, range(20,20000), fs=args.fs)
 	amplitudes = amplitudes + (20 * np.log10(abs(h)))
 	angles += np.angle(h)
 
