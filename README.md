@@ -8,14 +8,26 @@ This tool is based on scipy and matplotlib. As I clearly have no clue, what I am
 Operation
 =========
 ```
-usage: TLV320AIC3100_filters.py [-h] [--lowpass freq] [--highpass freq] [--notch freq bw]
+usage: TLV320AIC3100_filters.py [-h] [--fs freq] [--lowpass freq] [--lowbutter2 freq] [--lowbessel2 freq]
+                                [--lowshelf freq  gain] [--highpass freq] [--highbutter2 freq] [--highbessel2 freq]
+                                [--highshelf freq  gain] [--notch freq bw] [--peq freq  gain q]
 
 options:
-  -h, --help       show this help message and exit
+  -h, --help            show this help message and exit
+  --fs freq             sampling frequency, must go first, default 48000
   --lowpass freq
+  --lowbutter2 freq     second order Butterworth lowpass filter
+  --lowbessel2 freq     second order Bessel lowpass filter
+  --lowshelf freq  gain
+                        second order lowshelving filter
   --highpass freq
+  --highbutter2 freq    second order Butterworth highpass filter
+  --highbessel2 freq    second order Bessel highpass filter
+  --highshelf freq  gain
+                        second order highshelving filter
   --notch freq bw
-```
+  --peq freq  gain q    Full Parametric EQ
+  ```
 
 To generate a filter chain with lowpass, highpass and two notch filters:
 ```
@@ -33,11 +45,12 @@ Notch 8000 Hz BW  10 Hz
 What is implemented?
 ====================
 - Butterworth first order high- and lowpass
+- second order Butterworth, and Bessel high- and lowpass
 - Notch filter
+- full parametric EQ (frequency, gain, bandwidth)
+- shelf filters
 
 TODO compared with vendor tool
 ==============================
-- second order Buttwerworth, Linkwitz Riley, Bessel, and variable Q high- and lowpass
-- full parametric EQ (frequency, gain, bandwidth)
-- shelf filters
+- second order Linkwitz Riley and variable Q high- and lowpass
 - phase shift
